@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272165471255",
+    "project_id": "flutter-chat-app-6a177",
+    "storage_bucket": "flutter-chat-app-6a177.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272165471255:android:e615c41703bb3138e14852",
+        "android_client_info": {
+          "package_name": "hari.com.chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYrNvxME3fVuUgrYVp3EleW-zwVE4BgP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
