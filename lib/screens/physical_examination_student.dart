@@ -430,7 +430,7 @@ class MedicalDataCard extends StatelessWidget {
                 size: 16,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 0),
               Text(
                 'Date: $dateStr',
                 style: TextStyle(
@@ -439,7 +439,7 @@ class MedicalDataCard extends StatelessWidget {
                 ),
               ),
               if (data.containsKey('year') && data['year'] != null) ...[
-                const SizedBox(width: 16),
+                const SizedBox(width: 3 ),
                 Icon(
                   Icons.school,
                   size: 16,
