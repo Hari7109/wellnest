@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813017536323",
+    "project_id": "wellnest-demo",
+    "storage_bucket": "wellnest-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813017536323:android:674c9de2347356b92b81f6",
+        "android_client_info": {
+          "package_name": "com.example.albertian_wellnest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoafburUypIqs9BUbQ0ELVpOBOLjLmTrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
