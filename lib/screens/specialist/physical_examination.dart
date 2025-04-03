@@ -24,6 +24,7 @@ class _PhysicalExaminationPageState extends State<PhysicalExaminationPage> {
   final List<String> _years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
   final TextEditingController _remarksController = TextEditingController();
   bool _isLoading = false;
+  bool _hasData = false;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _PhysicalExaminationPageState extends State<PhysicalExaminationPage> {
     for (var category in _categories) {
       _controllers[category] = TextEditingController();
     }
+    _fetchExistingData();
   }
 
   @override
@@ -40,6 +42,35 @@ class _PhysicalExaminationPageState extends State<PhysicalExaminationPage> {
     }
     _remarksController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchExistingData() async {
+    try {
+      String regNo = widget.studentData['reg_no'];
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('physical_examinations')
+          .doc(regNo)
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+        setState(() {
+          _selectedYear = data['year'] ?? 'First Year';
+          _remarksController.text = data['remarks'] ?? '';
+          for (var category in _categories) {
+            _controllers[category]?.text = data[category.toLowerCase().replaceAll(' ', '_')] ?? '';
+          }
+          _hasData = true;
+        });
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _saveData() async {

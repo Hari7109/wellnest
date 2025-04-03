@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ENTExaminationForm extends StatefulWidget {
-  const ENTExaminationForm({Key? key}) : super(key: key);
+  final Map<String, dynamic> studentData;
+  const ENTExaminationForm({Key? key, required this.studentData}) : super(key: key);
 
   @override
   _ENTExaminationFormState createState() => _ENTExaminationFormState();
@@ -18,6 +19,16 @@ class _ENTExaminationFormState extends State<ENTExaminationForm> {
   final TextEditingController _throatController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
 
+  bool _isLoading = true; // Loading state
+  String regNo = "";
+
+  @override
+  void initState() {
+    super.initState();
+    regNo = widget.studentData['reg_no'];
+    _fetchENTExamination();
+  }
+
   @override
   void dispose() {
     // Dispose controllers
@@ -29,9 +40,30 @@ class _ENTExaminationFormState extends State<ENTExaminationForm> {
     super.dispose();
   }
 
+  Future<void> _fetchENTExamination() async {
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('ent_examinations').doc(regNo).get();
+
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        _earController.text = data['ear_examination'] ?? "";
+        _noseController.text = data['nose_examination'] ?? "";
+        _sinusesController.text = data['sinuses_examination'] ?? "";
+        _throatController.text = data['throat_examination'] ?? "";
+        _remarksController.text = data['remarks'] ?? "";
+      }
+    } catch (e) {
+      _showErrorDialog("Failed to fetch data: $e");
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   Future<void> _saveENTExamination() async {
     if (_formKey.currentState!.validate()) {
       try {
+        String regNo = widget.studentData['reg_no'];
         // Prepare examination data
         Map<String, dynamic> entExamData = {
           'ear_examination': _earController.text,
@@ -45,7 +77,8 @@ class _ENTExaminationFormState extends State<ENTExaminationForm> {
         // Save to Firestore
         await FirebaseFirestore.instance
             .collection('ent_examinations')
-            .add(entExamData);
+            .doc(regNo)
+            .set(entExamData);
 
         // Show success dialog
         _showSuccessDialog();

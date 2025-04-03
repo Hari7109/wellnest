@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EyeExaminationForm extends StatefulWidget {
-  const EyeExaminationForm({Key? key}) : super(key: key);
+  final Map<String, dynamic> studentData;
+  const EyeExaminationForm({Key? key, required this.studentData}) : super(key: key);
 
   @override
   _EyeExaminationFormState createState() => _EyeExaminationFormState();
@@ -17,6 +18,14 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
   final TextEditingController _reactionController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
 
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchExistingData(); // Fetch data when screen loads
+  }
+
   @override
   void dispose() {
     // Dispose controllers
@@ -27,9 +36,38 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
     super.dispose();
   }
 
+  Future<void> _fetchExistingData() async {
+    String regNo = widget.studentData['reg_no'];
+
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('eye_examinations')
+          .doc(regNo)
+          .get();
+
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        setState(() {
+          _rightVisionController.text = data['right_vision'] ?? '';
+          _leftVisionController.text = data['left_vision'] ?? '';
+          _reactionController.text = data['pupil_reaction'] ?? '';
+          _remarksController.text = data['remarks'] ?? '';
+        });
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop loading when data is fetched
+      });
+    }
+  }
+
   Future<void> _saveEyeExamination() async {
     if (_formKey.currentState!.validate()) {
       try {
+        String regNo = widget.studentData['reg_no'];
         // Prepare examination data
         Map<String, dynamic> eyeExamData = {
           'right_vision': _rightVisionController.text,
@@ -42,7 +80,8 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
         // Save to Firestore
         await FirebaseFirestore.instance
             .collection('eye_examinations')
-            .add(eyeExamData);
+            .doc(regNo)
+            .set(eyeExamData);
 
         // Show success dialog
         _showSuccessDialog();

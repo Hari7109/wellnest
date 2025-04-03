@@ -1,9 +1,10 @@
-import 'package:albertian_wellnest/screens/specialist/laboratory_findings_page.dart';
+import 'convert_to_pdf.dart';
+import 'laboratory_findings_page_teacher.dart';
 import 'package:flutter/material.dart';
-import 'physical_examination.dart';
-import 'eye_examination.dart';
-import 'ent_examination.dart';
-import 'body_composition_page.dart';
+import 'physical_examination_teacher.dart';
+import 'eye_examination_teacher.dart';
+import 'ent_examination_teacher.dart';
+import 'body_composition_page_teacher.dart';
 
 class FormsPage extends StatelessWidget {
   final Map<String, dynamic> studentData;
@@ -33,7 +34,7 @@ class FormsPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EyeExaminationForm(studentData: studentData)),
+                MaterialPageRoute(builder: (context) => EyeExaminationView(studentData: studentData)),
               );
             },
           ),
@@ -43,7 +44,7 @@ class FormsPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ENTExaminationForm(studentData: studentData)),
+                MaterialPageRoute(builder: (context) => ENTExaminationView(studentData: studentData)),
               );
             },
           ),
@@ -53,7 +54,7 @@ class FormsPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LaboratoryFindingsForm(studentData: studentData)),
+                MaterialPageRoute(builder: (context) => LaboratoryFindingsView(studentData: studentData)),
               );
             },
           ),
@@ -63,7 +64,17 @@ class FormsPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BodyCompositionFormPage(studentData: studentData)),
+                MaterialPageRoute(builder: (context) => BodyCompositionViewPage(studentData: studentData)),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Convert to PDF'),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ExaminationResultsPage(studentData: studentData)),
               );
             },
           ),

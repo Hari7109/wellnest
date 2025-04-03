@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LaboratoryFindingsForm extends StatefulWidget {
-  const LaboratoryFindingsForm({Key? key}) : super(key: key);
+  final Map<String, dynamic> studentData;
+  const LaboratoryFindingsForm({Key? key, required this.studentData}) : super(key: key);
 
   @override
   _LaboratoryFindingsFormState createState() => _LaboratoryFindingsFormState();
@@ -45,6 +46,12 @@ class _LaboratoryFindingsFormState extends State<LaboratoryFindingsForm> {
   final TextEditingController _tftT3T4Controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _fetchLaboratoryFindings();
+  }
+
+  @override
   void dispose() {
     // Dispose all controllers
     _bloodHbController.dispose();
@@ -69,9 +76,54 @@ class _LaboratoryFindingsFormState extends State<LaboratoryFindingsForm> {
     super.dispose();
   }
 
+  Future<void> _fetchLaboratoryFindings() async {
+    try {
+      String regNo = widget.studentData['reg_no'];
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('laboratory_findings')
+          .doc(regNo)
+          .get();
+
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        setState(() {
+          _selectedYear = data['selected_year'];
+
+          _bloodHbController.text = data['blood_hb'] ?? '';
+          _bloodTCController.text = data['blood_tc'] ?? '';
+          _bloodDCController.text = data['blood_dc'] ?? '';
+          _bloodESRController.text = data['blood_esr'] ?? '';
+
+          _urineAlbuminController.text = data['urine_albumin'] ?? '';
+          _urineSugarController.text = data['urine_sugar'] ?? '';
+          _urineMicroscopicController.text = data['urine_microscopic'] ?? '';
+
+          _stoolOvaController.text = data['stool_ova'] ?? '';
+          _stoolCystController.text = data['stool_cyst'] ?? '';
+
+          _bloodGroupingController.text = data['blood_grouping'] ?? '';
+          _bloodRhTypeController.text = data['blood_rh_type'] ?? '';
+          _bloodRBSController.text = data['blood_rbs'] ?? '';
+          _bloodUreaController.text = data['blood_urea'] ?? '';
+          _bloodHBsAgController.text = data['blood_hbsag'] ?? '';
+          _bloodHIVController.text = data['blood_hiv'] ?? '';
+          _bloodHCVController.text = data['blood_hcv'] ?? '';
+
+          _tftT3Controller.text = data['tft_t3'] ?? '';
+          _tftT4Controller.text = data['tft_t4'] ?? '';
+          _tftT3T4Controller.text = data['tft_t3t4'] ?? '';
+        });
+      }
+    } catch (e) {
+      _showErrorDialog("Error loading data: $e");
+    }
+  }
+
   Future<void> _saveLaboratoryFindings() async {
     if (_formKey.currentState!.validate()) {
       try {
+        String regNo = widget.studentData['reg_no'];
         // Prepare laboratory findings data
         Map<String, dynamic> labFindingsData = {
           'selected_year': _selectedYear,
@@ -110,8 +162,8 @@ class _LaboratoryFindingsFormState extends State<LaboratoryFindingsForm> {
 
         // Save to Firestore
         await FirebaseFirestore.instance
-            .collection('laboratory_findings')
-            .add(labFindingsData);
+            .collection('laboratory_findings').doc(regNo)
+            .set(labFindingsData);
 
         // Show success dialog
         _showSuccessDialog();

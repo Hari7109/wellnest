@@ -1,4 +1,5 @@
 import 'package:albertian_wellnest/screens/teacher/manage_student.dart';
+import 'package:albertian_wellnest/screens/teacher/update_health_details.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -181,7 +182,12 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                     'Student Health',
                     Icons.medical_services_outlined,
                     Colors.red,
-                        () {}, // Add navigation when needed
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UpdateHealthDetailsPageTeach()),
+                          );
+                        }, // Add navigation when needed
                   ),
                   _buildActionCard(
                     'Department Health',
