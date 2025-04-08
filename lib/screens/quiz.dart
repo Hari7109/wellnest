@@ -75,9 +75,18 @@ class _QuizPageState extends State<QuizPage> {
     return score;
   }
 
+
   Future<void> _saveQuizResult(int score, double rating) async {
     String userId = FirebaseAuth.instance.currentUser?.uid ?? "guest";
-    await FirebaseFirestore.instance.collection("quiz_results").doc(userId).set({
+
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+
+    var regno = userDoc['reg_no'];
+
+    await FirebaseFirestore.instance.collection("quiz_results").doc(regno).set({
       // "userId": userId,
       "score": score,
       "rating": rating,

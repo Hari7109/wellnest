@@ -1,6 +1,7 @@
 import 'convert_to_pdf.dart';
 import 'laboratory_findings_page_teacher.dart';
 import 'package:flutter/material.dart';
+import 'mental.dart';
 import 'physical_examination_teacher.dart';
 import 'eye_examination_teacher.dart';
 import 'ent_examination_teacher.dart';
@@ -65,6 +66,16 @@ class FormsPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BodyCompositionViewPage(studentData: studentData)),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('mental heatlh'),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MentalHealthView(studentData: studentData)),
               );
             },
           ),

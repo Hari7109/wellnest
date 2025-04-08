@@ -160,7 +160,7 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
                 labelText: 'Right Eye Vision',
                 iconColor: Colors.blue,
                 icon: Icons.remove_red_eye_outlined,
-                keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
                 validator: (value) =>
                 value == null || value.isEmpty ? 'Right vision is required' : null,
               ),
@@ -172,7 +172,7 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
                 labelText: 'Left Eye Vision',
                 iconColor: Colors.green,
                 icon: Icons.remove_red_eye,
-                keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
                 validator: (value) =>
                 value == null || value.isEmpty ? 'Left vision is required' : null,
               ),
@@ -230,13 +230,13 @@ class _EyeExaminationFormState extends State<EyeExaminationForm> {
     required Color iconColor,
     required IconData icon,
     int maxLines = 2,
-    TextInputType keyboardType = TextInputType.text,
+    // TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
-      keyboardType: keyboardType,
+      // keyboardType: keyboardType,
       validator: validator,
       decoration: InputDecoration(
         labelText: labelText,

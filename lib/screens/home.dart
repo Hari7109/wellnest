@@ -197,9 +197,17 @@ class _HomePageContentState extends State<HomePageContent> {
   Future<void> _fetchLastQuizScore() async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      var regno = userDoc['reg_no'];
+
       DocumentSnapshot doc = await FirebaseFirestore.instance
           .collection('quiz_results')
-          .doc(uid)
+          .doc(regno)
           .get();
 
       if (doc.exists) {
